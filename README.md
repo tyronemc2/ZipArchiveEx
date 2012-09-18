@@ -6,6 +6,19 @@ ZipArchiveEx is an extension of the PHP integrated ZipArchive class.
 When PHP is compiled with zip support, the programmer can make use of the ZipArchive class. Although the implementation seems to be very complete, the compression of subfolders and files in these subfolders has to be written by the script-programmer himself. ZipArchiveEx implements the addDir method, which adds exactly this missing functionality.
 
 
+# Usage
+
+	# ZipArchive as usual:
+	$zip = new ZipArchiveEx();
+	$zip->open('my.zip', ZIPARCHIVE::OVERWRITE);
+
+	# Add whole directory including contents:
+	$zip->addDir('mydir');
+
+	# Close archive (as usual):
+	$zip->close();
+
+
 # Installation
 
 ZipArchiveEx is provided as Composer package and can be installed via Packagist.
