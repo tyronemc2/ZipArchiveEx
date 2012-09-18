@@ -33,7 +33,9 @@ class ZipArchiveExTest extends PHPUnit_Framework_TestCase {
 		if ($result) {
 			# Extract directory
 			$output = array();
-			exec('unzip ' . $archive . ' -d /tmp', $output, $result);
+			# -u Option forces update of already existing files,
+			# importang for testing on travis-ci.org!
+			exec('unzip -u ' . $archive . ' -d /tmp', $output, $result);
 			$this->assertEquals(0, $result); # 0 = successfull
 
 			# $manipulate holds the file to manipulate,
