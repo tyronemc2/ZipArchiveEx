@@ -1,4 +1,4 @@
-ZipArchiveEx is an extension of the PHP integrated ZipArchive class
+ZipArchiveEx is an extension of the PHP integrated ZipArchive class.
 
 
 # Detailed description

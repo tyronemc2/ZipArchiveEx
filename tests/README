@@ -1,3 +1,0 @@
-Zip zipme-folder,
-unzip zipped zipme-folder to /tmp
-diff -arq folder1 folder2
