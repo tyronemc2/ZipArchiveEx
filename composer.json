@@ -1,5 +1,6 @@
 {
 	"name" : "codeless/ziparchiveex",
+	"description" : "Extension of the PHP integrated ZipArchive class for recursively adding directories",
 	"keywords" : ["compress","zip","recursive"],
 	"homepage" : "https://www.github.com/codeless/ziparchiveex",
 	"require" : {
