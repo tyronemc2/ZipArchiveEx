@@ -32,6 +32,30 @@ class ZipArchiveEx extends ZipArchive {
 		return $this->recursiveAddDir($dirname);
 	}
 
+
+	/**
+	 * Function: addDirContents
+	 *
+	 * Wrapper for the recursiveAddDir method. The difference
+	 * between addDir() and addDirContents() is, that
+	 * addDirContents will not add the root-directory as
+	 * a directory itself into the zipfile, but only
+	 * the contents.
+	 *
+	 * Parameters:
+	 *
+	 * 	$dirname - The directory to add.
+	 *
+	 * Returns:
+	 *
+	 * 	TRUE on success or FALSE on failure.
+	 */
+	public function addDirContents($dirname) {
+		LogMore::debug('In addDirContents');
+		return $this->recursiveAddDir($dirname, null, false);
+	}
+
+
 	/**
 	 * Function: recursiveAddDir
 	 *
@@ -42,12 +66,18 @@ class ZipArchiveEx extends ZipArchive {
 	 *
 	 * 	$dirname - The directory to add.
 	 * 	$basedir - The basedir where $dirname resides.
+	 * 	$adddir - Add the basedir as directory itself
+	 * 		to the zipfile?
 	 *
 	 * Returns:
 	 *
 	 * 	TRUE on success or FALSE on failure.
 	 */
-	private function recursiveAddDir($dirname, $basedir=null) {
+	private function recursiveAddDir(
+		$dirname,
+		$basedir=null,
+		$adddir=true)
+	{
 		LogMore::debug('In recursiveAddDir');
 		$rc = false;
 
@@ -65,9 +95,14 @@ class ZipArchiveEx extends ZipArchive {
 			$basename = $basedir . basename($dirname);
 
 			# Add empty directory with the name of the passed directory
-			LogMore::debug('Add empty dir %s', $basename);
-			$rc = $this->addEmptyDir($basename);
-			LogMore::debug('RC: %d', $rc);
+			if ($adddir) {
+				LogMore::debug('Add empty dir %s', $basename);
+				$rc = $this->addEmptyDir($basename);
+				LogMore::debug('RC: %d', $rc);
+				$basename = $basename . '/';
+			} else {
+				$basename = null;
+			}
 
 			# Get all files in the directory
 			$files = glob('*');
@@ -81,10 +116,10 @@ class ZipArchiveEx extends ZipArchive {
 				if (is_dir($f)) {
 					# Call recursiveAdd
 					LogMore::debug('Add dir %s', $f);
-					$this->recursiveAddDir($f, $basename . '/');
+					$this->recursiveAddDir($f, $basename);
 				} else {
-					LogMore::debug('Add file %s', $basename . '/' . $f);
-					$rc = $this->addFile($f, $basename . '/' . $f);
+					LogMore::debug('Add file %s', $basename . $f);
+					$rc = $this->addFile($f, $basename . $f);
 					LogMore::debug('RC: %d', $rc);
 				}
 			}

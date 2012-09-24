@@ -6,6 +6,7 @@ travis_install: install_nd2md
 	# Composer is already installed on travis, simply
 	# pull down the needed packages:
 	composer install
+	composer install --dev
 
 install: install_nd2md install_composer
 
@@ -13,6 +14,7 @@ install_composer:
 	@echo "Installing packages provided by composer:"
 	$(CURL) -s http://getcomposer.org/installer | php
 	$(PHP) composer.phar install
+	$(PHP) composer.phar install --dev
 
 install_nd2md:
 	@echo "Downloading the NaturalDocs2Markdown converter:"
@@ -21,10 +23,10 @@ install_nd2md:
 
 doc:
 	./nd2md.sh README.txt > README.md
-	./nd2md.sh HISTORY.txt > HISTORY.md
 
 update:
 	$(PHP) composer.phar update
+	$(PHP) composer.phar update --dev
 
 clean:
 	rm -fr vendor/ composer.lock composer.phar nd2md.sh

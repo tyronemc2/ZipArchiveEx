@@ -1,7 +1,7 @@
 <?php
 
 require('vendor/autoload.php');
-use \Heartsentwined\FileSystemManager\FileSystemManager;
+use 
 require('src/ZipArchiveEx.php');
 
 class ZipArchiveExTest extends PHPUnit_Framework_TestCase {
@@ -12,7 +12,7 @@ class ZipArchiveExTest extends PHPUnit_Framework_TestCase {
 		return array(
 			array('invalid dir', false, null),
 			array('tests/zipme', true, null),
-			array('tests/zipme', true, 'README')
+			array('tests/zipme', true, 'README'),
 		);
 	}
 
@@ -20,29 +20,23 @@ class ZipArchiveExTest extends PHPUnit_Framework_TestCase {
 	public function setUp() {
 		# Get temporary directory:
 		self::$tmpDir = sys_get_temp_dir();
+
+		# Remove extracted testdirectory:
+		FileSystemManager::rrmdir();
 	}
 
 
 	/**
 	 * @dataProvider provideTestDirs
 	 */
-	public function testAddDir(
-		$dirname,
-		$expected_result,
-		$manipulate,
-		$zipContentsOnly=false)
-	{
+	public function testAddDir($dirname, $expected_result, $manipulate) {
 		# Create new archive
 		$archive = '/tmp/archive.zip';
 		$zip = new ZipArchiveEx();
 		$zip->open($archive, ZIPARCHIVE::OVERWRITE);
 
 		# Try to add directory:
-		if ($zipContentsOnly) {
-			$result = $zip->addDirContents($dirname);
-		} else {
-			$result = $zip->addDir($dirname);
-		}
+		$result = $zip->addDir($dirname);
 		$this->assertEquals($expected_result, $result);
 
 		# Close archive:
@@ -50,25 +44,18 @@ class ZipArchiveExTest extends PHPUnit_Framework_TestCase {
 
 		# If directory was added successfully
 		if ($result) {
-			# Remove extracted testdirectory from
-			# former testruns:
-			$extractionDir = self::$tmpDir . '/' . basename($dirname);
-			FileSystemManager::rrmdir($extractionDir);
-
 			# Extract directory
 			$output = array();
 			# -u Option forces update of already existing files,
 			# importang for testing on travis-ci.org!
-			$extractTo = ($zipContentsOnly)
-				? $extractionDir
-				: self::$tmpDir;
-			exec('unzip -u ' . $archive . ' -d ' . $extractTo,
+			exec('unzip -u ' . $archive . ' -d ' . $self::$tmpDir,
 				$output,
 				$result);
 			$this->assertEquals(0, $result); # 0 = successfull
 
 			# $manipulate holds the file to manipulate,
 			# so the following assertion fails.
+			$extractionDir = self::$tmpDir . '/' . basename($dirname);
 			if ($manipulate) {
 				file_put_contents(
 					$extractionDir . '/' . $manipulate,
@@ -86,13 +73,6 @@ class ZipArchiveExTest extends PHPUnit_Framework_TestCase {
 				$result);
 			$this->assertEquals($expected_result, $result);
 		}
-	}
-
-	/**
-	 * @dataProvider provideTestDirs
-	 */
-	public function testAddDirContents($dirname, $expected_result, $manipulate) {
-		self::testAddDir($dirname, $expected_result, $manipulate, true);
 	}
 
 };
