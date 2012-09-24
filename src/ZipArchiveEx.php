@@ -1,10 +1,12 @@
 <?php
 
 # Include requirements if not testing:
-$wd = getcwd();
-chdir(dirname(__FILE__));
-require('../vendor/autoload.php');
-chdir($wd);
+if (!class_exists('Composer\Autoload\ClassLoader')) {
+	$wd = getcwd();
+	chdir(dirname(__FILE__));
+	require('../vendor/autoload.php');
+	chdir($wd);
+}
 
 # Start logging
 LogMore::open('ZipArchiveEx');
