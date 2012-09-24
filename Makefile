@@ -13,7 +13,6 @@ install: install_nd2md install_composer
 install_composer:
 	@echo "Installing packages provided by composer:"
 	$(CURL) -s http://getcomposer.org/installer | php
-	$(PHP) composer.phar install
 	$(PHP) composer.phar install --dev
 
 install_nd2md:
