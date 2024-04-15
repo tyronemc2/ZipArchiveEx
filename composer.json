@@ -1,12 +1,9 @@
 {
-	"name" : "codeless/ziparchiveex",
+	"name" : "tyronemc2/ziparchiveex",
 	"description" : "Extension of the PHP integrated ZipArchive class for recursively adding directories",
 	"license" : "MIT",
 	"keywords" : ["compress","zip","recursive"],
-	"homepage" : "https://www.github.com/codeless/ziparchiveex",
-	"require" : {
-		"codeless/logmore" : ">=0.8.3"
-	},
+	"homepage" : "https://www.github.com/tyronemc2/ziparchiveex",
 	"require-dev" : {
 		"heartsentwined/file-system-manager" : ">=1.1.1"
 	},
